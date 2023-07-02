@@ -1,0 +1,78 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+public class OnlineExaminationSystem {
+    private static final int EXAM_DURATION = 180;
+    private static final String USERNAME = "NANDAN";
+    private static String PASSWORD = "Online-EXAM";
+    private static final Map<String, String> userProfiles = new HashMap<>();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean loggedIn = false;
+        String username = null;  
+        while (!loggedIn) {
+            System.out.print("Enter Username:- ");
+            username = scanner.nextLine();
+            System.out.print("Enter Password:- ");
+            String password = scanner.nextLine();
+            if (authenticateUser(username, password)) {
+                loggedIn = true;
+                System.out.println("Login  Successful");
+            } else {
+                System.out.println("Wrong  Username or Password. Please try again.");
+            }
+        }
+        updateProfile(scanner, username);
+        selectAnswers(scanner);
+        System.out.println("\n Your exam will started now. You have " + EXAM_DURATION + "minutes to complete it.");
+        try {
+            TimeUnit.MINUTES.sleep(EXAM_DURATION);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("\n Time's up! Your exam has been automatically submitted.");
+        System.out.println("\n Session Closed. You have been logged out.");
+    }
+    private static boolean authenticateUser(String username, String password) {
+        return username.equals(USERNAME) && password.equals(PASSWORD);
+    }
+    private static void updateProfile(Scanner scanner, String username) {
+        System.out.print(" Update profile? (Y/N): ");
+        String choice = scanner.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+            System.out.print("Enter your New Name: ");
+            String name = scanner.nextLine();
+            userProfiles.put(username, name);
+            System.out.println("Profile updated successfully!");
+        }
+        System.out.print("\n Update password? (Y/N): ");
+        choice = scanner.nextLine();
+        if (choice.equalsIgnoreCase("Y")) {
+            System.out.print("Enter your new password: ");
+            String newPassword = scanner.nextLine();
+            PASSWORD = newPassword;
+            System.out.println("Password updated successfully!");
+        }
+    }
+    private static void selectAnswers(Scanner scanner) {
+        System.out.println("\nPlease answer the following questions:");
+
+        String[] questions = {
+            "Question 1: What is Software Engineering?\n (a) Designing a software \n (b) Testing a software \n (c) Application of engineering principles to the design a software \n (d) None of the above",
+            "Question 2: Who is the father of Software Engineering?\n (a) Margaret Hamilton \n (b) Watts S. Humphrey \n (c) Alan Turing \n (d) Boris Beizer",
+            "Question 3: What are the features of Software Code? \n (a) Simplicity \n (b) Accessibility \n (c) Modularity \n (d) All of the above "
+        };
+        String[] answers = {"c", "b", "c"};
+        for (int i = 0; i < questions.length; i++) {
+            System.out.println("\n" + questions[i]);
+            System.out.print("Enter your answer (a, b, c, d): ");
+            String userAnswer = scanner.nextLine();
+            if (userAnswer.equalsIgnoreCase(answers[i])) {
+                System.out.println("Correct Answer!");
+            } else {
+                System.out.println("Incorrect Answer!");
+            }
+        }
+    }
+}
